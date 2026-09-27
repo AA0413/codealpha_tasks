@@ -10,9 +10,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score, accuracy_score, confusion_matrix
 
-# -----------------------------
 # 1. Load the dataset
-# -----------------------------
 url = "https://raw.githubusercontent.com/selva86/datasets/master/GermanCredit.csv"
 data = pd.read_csv(url)
 
@@ -20,9 +18,7 @@ print("Dataset shape:", data.shape)
 print(data["credit_risk"].value_counts())
 # credit_risk: 1 = good credit risk, 0 = bad credit risk
 
-# -----------------------------
 # 2. Feature engineering
-# -----------------------------
 # Separate target from features
 target = data["credit_risk"]
 features = data.drop(columns=["credit_risk"])
@@ -40,16 +36,12 @@ for column in categorical_columns:
 scaler = StandardScaler()
 features_scaled = scaler.fit_transform(features)
 
-# -----------------------------
 # 3. Train/test split
-# -----------------------------
 X_train, X_test, y_train, y_test = train_test_split(
     features_scaled, target, test_size=0.2, random_state=42, stratify=target
 )
 
-# -----------------------------
 # 4. Train models
-# -----------------------------
 log_reg_model = LogisticRegression(max_iter=1000, random_state=42)
 log_reg_model.fit(X_train, y_train)
 
@@ -59,9 +51,7 @@ decision_tree_model.fit(X_train, y_train)
 random_forest_model = RandomForestClassifier(n_estimators=200, random_state=42)
 random_forest_model.fit(X_train, y_train)
 
-# -----------------------------
 # 5. Evaluate models
-# -----------------------------
 models = {
     "Logistic Regression": log_reg_model,
     "Decision Tree": decision_tree_model,
@@ -89,9 +79,7 @@ for model_name, model in models.items():
     print(f"  ROC-AUC  : {roc_auc:.3f}")
     print(f"  Confusion Matrix:\n{confusion_matrix(y_test, predictions)}")
 
-# -----------------------------
 # 6. Feature importance (Random Forest)
-# -----------------------------
 importances = pd.Series(random_forest_model.feature_importances_, index=features.columns)
 importances = importances.sort_values(ascending=False)
 
